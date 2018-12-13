@@ -1,0 +1,11 @@
+<% provide(:title, 'Sign up') %>
+<h1>住所登録変更</h1>
+
+<h2>登録住所一覧</h2>
+<% @addresses.each do |address| %>
+  <ul>
+    <%= address.address %>
+  </ul>
+<% end %>
+
+<h3><%= link_to "新規住所登録", addresses_new_path %></h3>
