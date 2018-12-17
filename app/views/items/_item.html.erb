@@ -1,8 +1,8 @@
 <li id="micropost-<%= item.id %>">
-<%= image_tag(item.picture)%>
-  <span class="user"><%= item.name %></span>
+<%= image_tag(item.picture, size: '218x316')%>
+  <span class="user"><div><%= item.name %></div></span>
   <span class="content">
-    <%= item.price %>円
+    <div>価格：<%= item.price %>円</div>
   </span>
   <%= link_to "詳細はこちら", url_for(:controller => 'items', :action => 'show', :id => item.id) %>
 </li>

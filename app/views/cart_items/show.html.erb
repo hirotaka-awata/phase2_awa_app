@@ -1,24 +1,31 @@
 <h1> ショッピングカート </h1>
 <% if @cart_items.present? %>
-<% @cart_items.each do |cart_item| %>
-  <%= cart_item.item.name %>
+  <% @cart_items.each do |cart_item| %>
+    <div>商品名：<%= cart_item.item.name %></div>
+    <div><%= image_tag(cart_item.item.picture, size: '100x150')%></div>
+    <div>価格：<%= cart_item.item_price %>円</div>
+    <div>小計：<%= cart_item.item.price * cart_item.quantity %>円</div>
 
-  <%= form_for(url_for(action: :edit),
-    html: {method: :patch}) do |f| %>
-    <%= f.select :quantity, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], :prompt => "#{cart_item.quantity}"  %>
+    <%= form_for(@cart_item, html: {method: :patch}) do |f| %>
+      <% if cart_item.item.stock < 10 %>
+        <h5>選択個数：<%= cart_item.quantity %></h5>
+        <%= f.select :quantity, [*(1..(cart_item.item.stock))], :prompt => "変更する数量を選択する"  %>
+      <% else %>
+        <h5>選択個数：<%= cart_item.quantity %></h5>
+        <%= f.select :quantity, [*(1..10)], :prompt => "変更する数量を選択する"  %>
+      <% end %>
+      <%= f.submit "数量を変更する", class: "btn btn-primary" %>
+      <div><%= hidden_field_tag 'cart_item[id]', cart_item.id %></div>
 
-    <%= f.submit "数量を変更する", class: "btn btn-primary" %>
-    <div><%= hidden_field_tag 'cart_item[id]', cart_item.id %></div>
+      <%= link_to "delete", cart_item, method: :delete,
+                                  data: { confirm: "削除してもよろしいですか？" } %>
+    <% end %>
 
-    <%= link_to "delete", cart_item, method: :delete,
-                                  data: { confirm: "You sure?" } %>
   <% end %>
 
-<% end %>
-
-<h1><%=link_to "住所選択に進む", addresses_select_path %></h1>
+  <h2><%=link_to "住所選択に進む", select_address_user_path(current_user) %></h2>
 
 <% else %>
  <h2> まだカートには何もありません</h2>
-
 <% end %>
+<h2><%=link_to "商品一覧ページに戻る", root_path%></h2>

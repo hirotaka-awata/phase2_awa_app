@@ -1,9 +1,0 @@
-<h1>住所を選択する</h1>
-<%= form_for(url_for(:controller => :users, action: :edit_address),
-  html: {method: :patch}) do |f| %>
-  <%= f.collection_select(:address, @addresses, :id, :address, :prompt => "住所を選択してください") %>
-
-  <%= f.submit "住所を選択する", class: "btn btn-primaxry" %>
-<% end %>
-
-<%=link_to "住所を追加する", new_address_path %>

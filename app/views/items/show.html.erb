@@ -1,17 +1,39 @@
 <h1>商品詳細</h1>
-<%= image_tag(@item.picture)%>
-<%= @item.name %>
-<%= @item.price %>円
+<%= image_tag(@item.picture, size: '218x316')%>
+<div>商品名：<%= @item.name %></div>
+<div>価格：<%= @item.price %>円</div>
+<div>在庫：<%= @item.stock %></div>
 <h2>商品詳細</h2>
 <%= @item.description %>
 
-<%= form_for(@cart_items) do |f| %>
-  <%= f.select :quantity, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] %>
+<% if logged_in? && current_item = CartItem.find_by(user_id: current_user.id, item_id: @item.id)%>
+  <% number_array = [*(1..(10 - current_item.quantity))] %>
+<% else %>
+  <% number_array = [*(1..10)]%>
+<% end %>
 
-  <%= f.submit "カートに追加する", class: "btn btn-primary" %>
-  <% if logged_in? %>
-  <div><%= hidden_field_tag 'cart_item[user_id]', current_user.id %></div>
-  <div><%= hidden_field_tag 'cart_item[item_id]', @item.id %></div>
-  <div><%= hidden_field_tag 'cart_item[item_price]', @item.price %></div>
+<% if @item.stock > 0 %>
+  <%= form_for(@cart_items) do |f| %>
+    <% if !logged_in? %>
+      <% if @item.stock > 10 %>
+        <%= f.select :quantity, number_array %>
+      <% else %>
+        <% number_array = [*(1..(@item.stock))] %>
+        <%= f.select :quantity, number_array %>
+      <% end %>
+    <% else %>
+      <% if @item.stock > 10 %>
+        <%= f.select :quantity, number_array %>
+      <% else %>
+        <% number_array = [*(1..(@item.stock - current_item.quantity))] %>
+        <%= f.select :quantity, number_array %>
+      <% end %>
+    <% end %>
+    <%= f.submit "カートに追加する", class: "btn btn-primary" %>
+    <% if logged_in? %>
+      <div><%= hidden_field_tag 'cart_item[item_id]', @item.id %></div>
+    <% end %>
   <% end %>
+<% else %>
+  <h2><div>在庫がありません</div></h2>
 <% end %>

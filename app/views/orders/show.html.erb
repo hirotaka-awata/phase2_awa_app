@@ -3,25 +3,30 @@
 <h2>商品一覧</h2>
 <% @cart_items.each do |cart_item| %>
 
-  <%= image_tag(cart_item.item.picture)%>
+  <%= image_tag(cart_item.item.picture, size: '100x150')%>
 
   <div>商品名：<%= cart_item.item.name %></div>
   <div>選択冊数：<%= cart_item.quantity %>冊</div>
-  <div>小計：<%= cart_item.quantity*cart_item.item_price %>円</div>
+  <div>商品価格：<%= cart_item.item_price %>円</div>
+  <div>小計：<%= cart_item.quantity * cart_item.item_price %>円</div>
 
-  <% @total_price += cart_item.item_price*cart_item.quantity %>
 <% end %>
 
 <h3>請求額</h3>
 <h3><%= @total_price %>円</h3>
 
+<%= link_to "カートに戻る", cart_items_path %>
+
+
+<h3>発送先住所：</h3>
+<% if @user_address = current_user.selected_address.address %>
+  <h3><%= @user_address %></h3>
+<% else %>
+  <h3>住所が選択されていません</h3>
+<% end %>
+<div><%=link_to "住所選択へ戻る", addresses_select_path %></div>
+
 <%= form_for(@order) do |f| %>
   <%= f.submit "注文を確定する", class: "btn btn-primary" %>
-  <div><%= hidden_field_tag 'order[user_id]', current_user.id %></div>
-  <div><%= hidden_field_tag 'order[address]', Address.find(current_user.address_id).address%></div>
-  <div><%= hidden_field_tag 'order[total_quantity]', @total_quantity %></div>
-  <div><%= hidden_field_tag 'order[total_price]', @total_price %></div>
+
 <% end %>
-
-
-<%= link_to "カートに戻る", cart_items_path %>

@@ -5,7 +5,8 @@
 <% @addresses.each do |address| %>
   <ul>
     <%= address.address %>
+    <%= link_to "削除", address,  method: :delete, data: { confirm: '住所を削除してもよろしいですか？'}%>
   </ul>
 <% end %>
 
-<h3><%= link_to "新規住所登録", addresses_new_path %></h3>
+<h3><%= link_to "新規住所登録", new_address_path %></h3>

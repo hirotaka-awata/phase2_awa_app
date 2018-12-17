@@ -33,8 +33,21 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit_address
-    redirect_to orders_path
+  def select_address
+    @addresses = current_user.addresses
+    @user = current_user
+  end
+
+  def update_address
+    if (address_id = params['/edit_address'][:address]) && Address.find_by(id: params['/edit_address'][:address])
+      current_user.delivery_address_id = address_id
+      if current_user.save
+        redirect_to orders_path
+      end
+    else
+      flash[:danger] = "住所が選択されていません。"
+      redirect_to addresses_select_path
+    end
   end
 
   def destroy

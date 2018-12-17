@@ -1,7 +1,9 @@
 class User < ApplicationRecord
   has_many :addresses, dependent: :destroy
+  has_one :selected_address, class_name: "Address"
   has_many :items, dependent: :destroy
   has_many :cart_items, dependent: :destroy
+  has_many :orders
   before_save   :downcase_email
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -17,6 +19,7 @@ class User < ApplicationRecord
                                                     BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
+
 
 
   private

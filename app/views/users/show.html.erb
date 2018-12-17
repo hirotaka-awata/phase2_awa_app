@@ -1,13 +1,11 @@
 <% provide(:title, @user.name) %>
 <h1>Your Profile<h1>
 
-<h2>
-  <%= "基本情報" %>
-  <%= gravatar_for @user %>
-  <%= @user.name %>
-  <%= @user.email %>
-  <li><%= link_to "基本情報変更", edit_user_path(current_user) %></li>
-</h2>
+<h2><%= "基本情報" %></h2>
+  <div>名前：<%= @user.name %></div>
+  <div>メールアドレス：<%= @user.email %></div>
+  <%= link_to "基本情報変更", edit_user_path(current_user) %>
+
 
 <h3>住所一覧</h3>
 <% @addresses.each do |address| %>
@@ -18,4 +16,4 @@
 
 <%= link_to '登録住所の追加・変更', '/addresses' %>
 
-<h4><%= link_to "アカウントを削除する", current_user, method: :delete %></h4>
+<h4><%= link_to "アカウントを削除する", current_user, method: :delete, data: { confirm: 'アカウントを削除してもよろしいですか？' }%></h4>

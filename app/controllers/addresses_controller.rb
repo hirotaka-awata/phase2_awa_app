@@ -23,16 +23,8 @@ class AddressesController < ApplicationController
     @user = current_user
   end
 
-  def update
-    if params['/edit_address'][:address].empty?
-      flash[:error] = "住所が選択されていません。"
-      redirect_to addresses_select_path
-    else
-      address_id = params['/edit_address'][:address]
-      current_user.address_id = address_id
-      if current_user.save
-        redirect_to orders_path
-      end
-    end
+  def destroy
+    Address.find(params[:id]).destroy
+    redirect_to addresses_path
   end
 end
