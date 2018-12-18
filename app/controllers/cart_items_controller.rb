@@ -3,15 +3,15 @@ class CartItemsController < ApplicationController
   include OrdersHelper
   before_action :logged_in_user
   before_action :check_quantity, :check_item_price, only: [:show]
+  before_action :check_cart_item_number, only: [:create]
 
   def create
-    # 関連付けでレコードを作りましょう（そしてなぜ、CartItem.find_byがダメなのかを明確にしましょう）
-    if cart_item = current_user.cart_items.find_by(item_id: params[:cart_item][:item_id])
-      cart_item.quantity += params[:cart_item][:quantity].to_i
+    if !@cart_item.nil?
+      @cart_item.quantity += params[:cart_item][:quantity].to_i
     else
-      cart_item = current_user.cart_items.build(item_id: params[:cart_item][:item_id], item_price: Item.find(params[:cart_item][:item_id]).price, quantity: params[:cart_item][:quantity])
+      @cart_item = current_user.cart_items.build(item_id: params[:cart_item][:item_id], item_price: Item.find(params[:cart_item][:item_id]).price, quantity: params[:cart_item][:quantity])
     end
-    if cart_item.save
+    if @cart_item.save
       flash[:success] = "カートに商品が追加されました。"
     else
       flash[:danger] = "カートに商品を追加できませんでした。"
@@ -26,7 +26,7 @@ class CartItemsController < ApplicationController
     redirect_to cart_items_url
   end
 
-  def show   # Restfulなのか？
+  def show
     @cart_items = current_user.cart_items
     @total_price = cart_items_total_price
     @cart_item = CartItem.new
@@ -35,13 +35,13 @@ class CartItemsController < ApplicationController
   def update
     unless params[:cart_item][:quantity].empty?
       @cart_item = CartItem.find(params[:cart_item][:id])
-      if @cart_item.update_attribute(:quantity, params[:cart_item][:quantity])
+      if @cart_item.update_attributes(quantity: params[:cart_item][:quantity])
         flash[:success] = "#{@cart_item.item.name}の数量を変更しました"
       else
         flash[:danger] = "商品数量を変更できませんでした"
       end
     else
-      flash[:danger] = "変更する数量を選択してください。"  # どういう時にこれが発生するの？
+      flash[:danger] = "変更する数量を選択してください。"
     end
     redirect_to cart_items_url
   end

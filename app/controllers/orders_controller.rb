@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    order = current_user.orders.build(address: current_user.selected_address.address, total_quantity: current_user.cart_items.sum(:quantity), total_price: cart_items_total_price )
+    order = current_user.orders.build(address: Address.find(current_user.delivery_address_id).address, total_quantity: current_user.cart_items.sum(:quantity), total_price: cart_items_total_price )
     if order.save
       current_user.cart_items.each do |cart_item|
         order_item = OrderItem.new(order_id: order.id, item_id: cart_item.item.id, item_price: cart_item.item_price, item_quantity: cart_item.quantity)
@@ -22,9 +22,9 @@ class OrdersController < ApplicationController
         item.save
       end
       current_user.cart_items.destroy_all
-      render 'completed' # renderの問題点を調べましょう（悪いとは言っていない）
+      render 'completed'
     else
-      flash[:danger] = "住所が選択されていないため、注文が確定できませんでした。" #なぜ、注文が確定しなかったのかユーザに知らせましょう。
+      flash[:danger] = "住所が選択されていないため、注文が確定できませんでした。"
       redirect_to orders_path
     end
   end

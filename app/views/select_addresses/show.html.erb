@@ -1,0 +1,8 @@
+<h1>住所を選択する</h1>
+<%= form_for(@user,url: select_address_path,  html: {method: :patch}) do |f| %>
+  <%= f.collection_select(:delivery_address_id, @addresses, :id, :address, {:include_blank => "住所を選択してください"}) %>
+
+  <%= f.submit "住所を設定し、注文確定確認に進む", class: "btn btn-primary" %>
+<% end %>
+
+<%=link_to "住所を追加する", new_address_path %>

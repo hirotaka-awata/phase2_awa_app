@@ -6,7 +6,7 @@
 <h2>商品詳細</h2>
 <%= @item.description %>
 
-<% if logged_in? && current_item = CartItem.find_by(user_id: current_user.id, item_id: @item.id)%>
+<% if logged_in? && (current_item = current_user.cart_items.find_by(item_id: @item.id))%>
   <% number_array = [*(1..(10 - current_item.quantity))] %>
 <% else %>
   <% number_array = [*(1..10)]%>
@@ -14,21 +14,20 @@
 
 <% if @item.stock > 0 %>
   <%= form_for(@cart_items) do |f| %>
-    <% if !logged_in? %>
-      <% if @item.stock > 10 %>
-        <%= f.select :quantity, number_array %>
-      <% else %>
-        <% number_array = [*(1..(@item.stock))] %>
-        <%= f.select :quantity, number_array %>
+    <% if logged_in? %>
+      <% if @item.stock < 11 %>
+        <% if current_item %>
+          <% number_array = [*(1..(@item.stock - current_item.quantity))] %>
+        <% else %>
+          <% number_array = [*(1..@item.stock)] %>
+        <% end %>
       <% end %>
     <% else %>
-      <% if @item.stock > 10 %>
-        <%= f.select :quantity, number_array %>
-      <% else %>
-        <% number_array = [*(1..(@item.stock - current_item.quantity))] %>
-        <%= f.select :quantity, number_array %>
+      <% if @item.stock < 11 %>
+        <% number_array = [*(1..(@item.stock))] %>
       <% end %>
     <% end %>
+    <%= f.select :quantity, number_array %>
     <%= f.submit "カートに追加する", class: "btn btn-primary" %>
     <% if logged_in? %>
       <div><%= hidden_field_tag 'cart_item[item_id]', @item.id %></div>

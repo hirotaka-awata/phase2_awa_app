@@ -19,12 +19,12 @@
 
 
 <h3>発送先住所：</h3>
-<% if @user_address = current_user.selected_address.address %>
+<% if @user_address = Address.find(current_user.delivery_address_id).address %>
   <h3><%= @user_address %></h3>
 <% else %>
   <h3>住所が選択されていません</h3>
 <% end %>
-<div><%=link_to "住所選択へ戻る", addresses_select_path %></div>
+<div><%=link_to "住所選択へ戻る", select_address_path %></div>
 
 <%= form_for(@order) do |f| %>
   <%= f.submit "注文を確定する", class: "btn btn-primary" %>

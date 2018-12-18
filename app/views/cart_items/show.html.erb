@@ -9,7 +9,7 @@
     <%= form_for(@cart_item, html: {method: :patch}) do |f| %>
       <% if cart_item.item.stock < 10 %>
         <h5>選択個数：<%= cart_item.quantity %></h5>
-        <%= f.select :quantity, [*(1..(cart_item.item.stock))], :prompt => "変更する数量を選択する"  %>
+        <%= f.select :quantity, [*(1..(cart_item.item.stock))], :include_blank => "変更する数量を選択する"  %>
       <% else %>
         <h5>選択個数：<%= cart_item.quantity %></h5>
         <%= f.select :quantity, [*(1..10)], :prompt => "変更する数量を選択する"  %>
@@ -23,7 +23,7 @@
 
   <% end %>
 
-  <h2><%=link_to "住所選択に進む", select_address_user_path(current_user) %></h2>
+  <h2><%=link_to "住所選択に進む", select_address_path %></h2>
 
 <% else %>
  <h2> まだカートには何もありません</h2>
