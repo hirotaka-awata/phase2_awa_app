@@ -17,21 +17,49 @@
     <% if logged_in? %>
       <% if @item.stock < 11 %>
         <% if current_item %>
-          <% number_array = [*(1..(@item.stock - current_item.quantity))] %>
+          <% if current_item.quantity == @item.stock || current_item.quantity == 10 %>
+            <h2><div>これ以上商品をカートに追加することができません</div></h2>
+          <% else %>
+            <% number_array = [*(1..(@item.stock - current_item.quantity))] %>
+            <%= f.select :quantity, number_array %>
+            <%= f.submit "カートに追加する", class: "btn btn-primary" %>
+          <% end %>
         <% else %>
           <% number_array = [*(1..@item.stock)] %>
+          <%= f.select :quantity, number_array %>
+          <%= f.submit "カートに追加する", class: "btn btn-primary" %>
+        <% end %>
+      <% else %>
+        <% if current_item %>
+          <% if current_item.quantity == 10 %>
+            <h2><div>これ以上商品をカートに追加することができません</div></h2>
+          <% else %>
+            <% number_array = [*(1..(10 - (current_item.quantity)))] %>
+            <%= f.select :quantity, number_array %>
+            <%= f.submit "カートに追加する", class: "btn btn-primary" %>
+          <% end %>
+        <% else %>
+          <% number_array = [*(1..10)] %>
+          <%= f.select :quantity, number_array %>
+          <%= f.submit "カートに追加する", class: "btn btn-primary" %>
         <% end %>
       <% end %>
     <% else %>
       <% if @item.stock < 11 %>
         <% number_array = [*(1..(@item.stock))] %>
+        <%= f.select :quantity, number_array %>
+        <%= f.submit "カートに追加する", class: "btn btn-primary" %>
+      <% else %>
+        <% number_array = [*(1..10)] %>
+        <%= f.select :quantity, number_array %>
+        <%= f.submit "カートに追加する", class: "btn btn-primary" %>
       <% end %>
     <% end %>
-    <%= f.select :quantity, number_array %>
-    <%= f.submit "カートに追加する", class: "btn btn-primary" %>
-    <% if logged_in? %>
-      <div><%= hidden_field_tag 'cart_item[item_id]', @item.id %></div>
+        <% if logged_in? %>
+
     <% end %>
+    <%= hidden_field_tag 'cart_item[id]', @item.id %>
+    <%= hidden_field_tag 'cart_item[hash_id]', @item_id %>
   <% end %>
 <% else %>
   <h2><div>在庫がありません</div></h2>

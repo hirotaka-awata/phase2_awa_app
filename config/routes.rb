@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   post 'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
   get 'items'   => 'items#show'
-  get 'cart_items' => 'cart_items#show'
+  get 'cart_items' => 'cart_items#index'
   post 'cart_items' => 'cart_items#create'
   patch 'cart_items' => 'cart_items#update'
   get 'orders'   => 'orders#show'

@@ -24,5 +24,8 @@ class AddressesController < ApplicationController
   def destroy
     Address.find(params[:id]).destroy
     redirect_to addresses_path
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:danger] = '住所が見つかりません。'
+    redirect_to addresses_path
   end
 end

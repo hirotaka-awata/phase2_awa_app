@@ -6,7 +6,7 @@
     <div>価格：<%= cart_item.item_price %>円</div>
     <div>小計：<%= cart_item.item.price * cart_item.quantity %>円</div>
 
-    <%= form_for(@cart_item, html: {method: :patch}) do |f| %>
+    <%= form_for(cart_item, url: cart_item_path(cart_item), html: {method: :patch}) do |f| %>
       <% if cart_item.item.stock < 10 %>
         <h5>選択個数：<%= cart_item.quantity %></h5>
         <%= f.select :quantity, [*(1..(cart_item.item.stock))], :include_blank => "変更する数量を選択する"  %>
@@ -14,13 +14,14 @@
         <h5>選択個数：<%= cart_item.quantity %></h5>
         <%= f.select :quantity, [*(1..10)], :prompt => "変更する数量を選択する"  %>
       <% end %>
+      <%= hidden_field_tag 'cart_item[hash_id]', Digest::SHA256.hexdigest("#{cart_item.id}") %>
       <%= f.submit "数量を変更する", class: "btn btn-primary" %>
-      <div><%= hidden_field_tag 'cart_item[id]', cart_item.id %></div>
-
-      <%= link_to "delete", cart_item, method: :delete,
-                                  data: { confirm: "削除してもよろしいですか？" } %>
     <% end %>
 
+    <%= form_for(cart_item, url: cart_item_path(cart_item), html: {method: :delete}) do |f| %>
+      <%= f.submit "商品を削除する", class: "btn btn-primary" %>
+      <%= hidden_field_tag 'cart_item[hash_id]', Digest::SHA256.hexdigest("#{cart_item.id}") %>
+    <% end %>
   <% end %>
 
   <h2><%=link_to "住所選択に進む", select_address_path %></h2>

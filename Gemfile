@@ -78,3 +78,11 @@ gem 'faker',          '1.9.1'
 
 gem 'will_paginate',           '3.1.6'
 gem 'bootstrap-will_paginate', '1.0.0'
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.6.0'
+end
+
+group :development do
+  gem 'spring-commands-rspec'
+end

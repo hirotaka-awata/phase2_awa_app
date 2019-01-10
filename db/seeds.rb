@@ -5,6 +5,16 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+User.create!(name:  "粟田裕崇",
+             email: "awata.hirotaka@lmi.ne.jp",
+             password:              "20292872",
+             password_confirmation: "20292872")
+User.create!(name:  "石田静馬",
+            email: "ishida.shizuma@lmi.ne.jp",
+            password:              "20292872",
+            password_confirmation: "20292872")
+
+
 
 Item.create!(name: 'からくりサーカス１', price: '450', description: "遺産相続絡みで命を狙われる少年・勝と人を笑わせないと死んでしまう病にかかった男・鳴海、そして勝を助けるためにからくり人形を操る女・しろがね…。三人の運命が交錯する時、“笑顔”の本当の意味が…！？欧風熱血機巧活劇、ここに開幕！！", stock: 100, picture: 'karakuri1.jpg' )
 Item.create!(name: 'からくりサーカス２', price: '450', description: "遺産相続で命を狙われる才賀勝が誘拐された！中国拳法の使い手・加藤鳴海と、からくり人形使いのしろがねは、勝を助けるために、才賀のからくり屋敷に向かうが、そこには様々な罠と、異様なからくり人形の数々が待ち受けており…！？", stock: 100, picture: 'karakuri2.jpg')
